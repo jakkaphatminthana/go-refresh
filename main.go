@@ -6,6 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jakkaphatminthana/go-refresh/config"
+	"github.com/jakkaphatminthana/go-refresh/middlewares"
+	"github.com/jakkaphatminthana/go-refresh/utils"
 )
 
 func InitLoadEnv() {
@@ -20,7 +22,10 @@ func InitLoadEnv() {
 func main() {
 	app := gin.Default()
 
+	app.Use(middlewares.CORS())
+
 	InitLoadEnv()
+	utils.InitializeLogger()
 
 	app.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
