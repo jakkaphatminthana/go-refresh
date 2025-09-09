@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jakkaphatminthana/go-refresh/config"
+	"github.com/jakkaphatminthana/go-refresh/database"
 	"github.com/jakkaphatminthana/go-refresh/middlewares"
 	"github.com/jakkaphatminthana/go-refresh/utils"
 )
@@ -19,13 +21,27 @@ func InitLoadEnv() {
 	config.AppConfig = appConfig
 }
 
+func init() {
+	InitLoadEnv()
+	utils.InitializeLogger()
+
+	// database
+	if _, errConnectDB := database.ConnectDB(); errConnectDB != nil {
+		panic(errConnectDB)
+	} else {
+		fmt.Println("[INFO] 📦 Initialize Connect database successfully...")
+	}
+}
+
 func main() {
 	app := gin.Default()
 
-	app.Use(middlewares.CORS())
+	// For security
+	if err := app.SetTrustedProxies(nil); err != nil {
+		panic(err)
+	}
 
-	InitLoadEnv()
-	utils.InitializeLogger()
+	app.Use(middlewares.CORS())
 
 	app.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{

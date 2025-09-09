@@ -20,6 +20,7 @@ type ConfigStructure struct {
 	DatabaseName     string `mapstructure:"DB_NAME"`
 	DatabaseUsername string `mapstructure:"DB_USERNAME"`
 	DatabasePassword string `mapstructure:"DB_PASSWORD"`
+	DatabaseSSLMode  string `mapstructure:"DB_SSLMODE"`
 }
 
 // ฟังก์ชัน bindingEnv ใช้เพื่อบอก Viper ว่า field ใน struct นี้จะต้องอ่านจาก environment ตัวไหน
